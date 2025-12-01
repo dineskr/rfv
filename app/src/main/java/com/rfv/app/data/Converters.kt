@@ -5,20 +5,8 @@ import java.time.Instant
 
 class Converters {
     @TypeConverter
-    fun fromInstant(value: Instant?): Long? = value?.toEpochMilli()
+    fun fromEpoch(value: Long?): Instant? = value?.let { Instant.ofEpochMilli(it) }
 
     @TypeConverter
-    fun toInstant(value: Long?): Instant? = value?.let { Instant.ofEpochMilli(it) }
-
-    @TypeConverter
-    fun fromEventType(value: EventType?): String? = value?.name
-
-    @TypeConverter
-    fun toEventType(value: String?): EventType? = value?.let { EventType.valueOf(it) }
-
-    @TypeConverter
-    fun fromSyncState(value: SyncState?): String? = value?.name
-
-    @TypeConverter
-    fun toSyncState(value: String?): SyncState? = value?.let { SyncState.valueOf(it) }
+    fun toEpoch(value: Instant?): Long? = value?.toEpochMilli()
 }

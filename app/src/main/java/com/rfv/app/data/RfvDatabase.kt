@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [Event::class], version = 1, exportSchema = false)
+@Database(entities = [Event::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class RfvDatabase : RoomDatabase() {
     abstract fun eventDao(): EventDao
@@ -16,6 +16,6 @@ abstract class RfvDatabase : RoomDatabase() {
             context.applicationContext,
             RfvDatabase::class.java,
             "rfv.db"
-        ).fallbackToDestructiveMigration().build()
+        ).build()
     }
 }

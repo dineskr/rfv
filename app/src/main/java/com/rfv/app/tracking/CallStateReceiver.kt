@@ -4,28 +4,18 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
-import com.rfv.app.data.EventRepository
-import com.rfv.app.data.RfvDatabase
-import java.time.Instant
-import java.util.concurrent.ConcurrentHashMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CallStateReceiver : BroadcastReceiver() {
-    private val startTimes = ConcurrentHashMap<String, Instant>()
-
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent?) {
+        if (intent?.action != TelephonyManager.ACTION_PHONE_STATE_CHANGED) return
         val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE) ?: return
-        val number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-        val repo = EventRepository(RfvDatabase.build(context).eventDao())
 
-        when (state) {
-            TelephonyManager.EXTRA_STATE_OFFHOOK -> {
-                startTimes[number ?: "unknown"] = Instant.now()
-            }
-            TelephonyManager.EXTRA_STATE_IDLE -> {
-                val key = number ?: "unknown"
-                val start = startTimes.remove(key) ?: return
-                repo.logCall(number, start, Instant.now())
-            }
+        // Placeholder for call state handling (e.g., log start/end timestamps)
+        CoroutineScope(Dispatchers.IO).launch {
+            // No-op stub
         }
     }
 }
