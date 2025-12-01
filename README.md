@@ -13,24 +13,29 @@ See [docs/design.md](docs/design.md) for architecture, data model, permissions, 
 - `app/src/main/java/com/rfv/app` – Application bootstrap (`RfvApp`), tracking services, and UI entry point.
 - `docs/` – Design documentation and requirements.
 
-## Build
+## Step-by-step: getting the project and running it in Android Studio
+
+### 1) Copy the full project folder to your computer
+Pick the method that fits your setup. Both give you the entire `rfv/` directory at once.
+
+- **Zip (Linux/macOS)**: From the parent directory run `zip -r rfv.zip rfv/`. This compresses the folder so you can move one file instead of hundreds.
+- **Zip (Windows PowerShell)**: Open PowerShell in the parent folder and run `Compress-Archive -Path rfv -DestinationPath rfv.zip`.
+  - If `cd /workspace` fails on Windows (paths start with a drive letter), first run `Get-ChildItem` to see where you saved the folder, then `Set-Location <that-folder>` and run the `Compress-Archive` command.
+- **Push to your GitHub**:
+  1. Create an empty repo on GitHub.
+  2. In the project folder run `git remote add origin <your-repo-url>`, then optionally `git branch -M main`, then `git push -u origin main`.
+  3. Clone that repo on your computer.
+
+### 2) Open in Android Studio (what each step does)
 The project is configured for Android Studio Giraffe/Koala with Android Gradle Plugin 8.3, Kotlin 1.9, and Compose Material 3.
-1. Download `gradle/wrapper/gradle-wrapper.jar` from Gradle 8.4 (e.g., via a machine with internet access) and place it under `gradle/wrapper/`.
-2. Open the project in Android Studio.
-3. Sync Gradle (requires Android SDK 34 installed).
-4. Run the `app` configuration on a device or emulator (Android 8+). Permissions for calls, calendar, usage access, location, and foreground service are requested at runtime.
 
-## Copy or push the project to your machine
-Use whichever route is easiest for you to get the entire `/workspace/rfv` folder onto your computer before opening it in Android Studio.
+1. **Restore the Gradle wrapper JAR**: Download `gradle/wrapper/gradle-wrapper.jar` for Gradle 8.4 and place it under `gradle/wrapper/`. This lets the project use the exact Gradle version it expects.
+2. **File > Open the `rfv` folder**: Opens the project and reads `settings.gradle.kts`/`build.gradle.kts` to know the modules and plugins.
+3. **Let Gradle sync (needs Android SDK 34)**: Android Studio will download dependencies and generate Compose/Room code. If SDK 34 is missing, install it when prompted.
+4. **Run the `app` configuration on a device/emulator (Android 8+)**: Builds the APK and installs it. On first launch Android will request permissions for calls, calendar, usage access, location, and foreground service so tracking and the map picker work.
 
-**Zip the workspace**
-- From a terminal in the parent directory: `zip -r rfv.zip rfv/`.
-- Transfer `rfv.zip` to your computer, unzip it, then open the `rfv` folder in Android Studio.
+### 3) Where things are once it opens
+- Manual log + map picker + CalDAV credentials UI: `app/src/main/java/com/rfv/app/ui/` (`MainActivity`, `CaldavSettingsScreen`).
+- Tracking services and receivers: `app/src/main/java/com/rfv/app/tracking/`.
+- Data layer (Room entities/DAOs): `app/src/main/java/com/rfv/app/data/`.
 
-**Push to your GitHub**
-1. Create an empty repo on GitHub.
-2. Inside `/workspace/rfv` run:
-   - `git remote add origin <your-repo-url>`
-   - `git branch -M main` (optional)
-   - `git push -u origin main`
-3. Clone that repo on your computer and open it in Android Studio.
